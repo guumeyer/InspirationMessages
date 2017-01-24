@@ -43,22 +43,38 @@ class QuotaViewController: UIViewController {
         let dataService = DataService()
         dataService.getQuoteData { (aQuote, aAuthor) in
             
-            UIView.animate(withDuration: 0.5, animations: { 
-                //fadeIn and backgroundColor
-                self.fadeIn()
-                self.view.backgroundColor = self.getRandomColor()
+            //quote
+            self.quoteLabel.text = "”\(aQuote)”"
+            self.quoteLabel.sizeToFit()
+            
+            //author
+            self.authorLabel.text = "- \(aAuthor)"
+            self.quoteLabel.sizeToFit()
+            
+            UIView.animateKeyframes(withDuration: 10.0, delay: 0.0, options: UIViewKeyframeAnimationOptions.calculationModeCubic, animations: {
                 
-                //quote
-                self.quoteLabel.text = "”\(aQuote)”"
-                self.quoteLabel.sizeToFit()
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.10, animations: {
+                    self.fadeIn()
+                    self.view.backgroundColor = self.getRandomColor()
+                    
+                    //quote
+                    self.quoteLabel.text = "”\(aQuote)”"
+                    self.quoteLabel.sizeToFit()
+                    
+                    //author
+                    self.authorLabel.text = "- \(aAuthor)"
+                    
+                    if aAuthor.isEmpty{
+                        self.authorLabel.text = "- unknown"
+                    }
+                    self.quoteLabel.sizeToFit()
+                })
+                UIView.addKeyframe(withRelativeStartTime: 0.9, relativeDuration: 0.10, animations: {
+                    self.fadeOut()
+                })
                 
-                //author
-                self.authorLabel.text = "- \(aAuthor)"
-                
-                if aAuthor.isEmpty{
-                    self.authorLabel.text = "- unknown"
-                }
-                self.quoteLabel.sizeToFit()
+            }, completion: { (finished) in
+                self.setQuote()
             })
         }
         
