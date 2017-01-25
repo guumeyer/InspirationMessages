@@ -9,7 +9,7 @@
 import UIKit
 
 class DataService: NSObject {
-    func getQuoteData(completion: @escaping (_ quote: String,_ author:String) -> () ){
+    func getQuoteData(completion: @escaping (_ quote: String,_ author:String) -> (),fail: @escaping () -> () ){
         
         let quoteEndPoint = "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json"
         
@@ -41,6 +41,10 @@ class DataService: NSObject {
                     }
                 }
             } catch {
+               
+                DispatchQueue.main.sync {
+                    fail()
+                }
                 print("Error to parse")
             }
             
